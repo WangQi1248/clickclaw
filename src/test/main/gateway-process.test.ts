@@ -96,23 +96,27 @@ describe('GatewayProcess', () => {
     getSettingsMock.mockReturnValue({})
     buildProxyEnvMock.mockReturnValue({})
 
-    execMock.mockImplementation((_cmd: string, _opts: unknown, cb: (err: Error | null, stdout: string) => void) => {
-      cb(null, '')
-    })
+    execMock.mockImplementation(
+      (_cmd: string, _opts: unknown, cb: (err: Error | null, stdout: string) => void) => {
+        cb(null, '')
+      }
+    )
   })
 
   it('通过 /ready 后进入 running', async () => {
     spawnMock.mockImplementation(() => createFakeChild())
-    httpGetMock.mockImplementation(((_url: unknown, cb: (res: { statusCode: number; resume: () => void }) => void) => {
-      const req = new EventEmitter() as EventEmitter & {
-        setTimeout: (ms: number, fn: () => void) => void
-        destroy: () => void
+    httpGetMock.mockImplementation(
+      (_url: unknown, cb: (res: { statusCode: number; resume: () => void }) => void) => {
+        const req = new EventEmitter() as EventEmitter & {
+          setTimeout: (ms: number, fn: () => void) => void
+          destroy: () => void
+        }
+        queueMicrotask(() => cb({ statusCode: 200, resume: () => {} }))
+        req.setTimeout = (_ms, _fn) => {}
+        req.destroy = () => {}
+        return req as never
       }
-      queueMicrotask(() => cb({ statusCode: 200, resume: () => {} }))
-      req.setTimeout = (_ms, _fn) => {}
-      req.destroy = () => {}
-      return req as never
-    }) as any)
+    )
 
     const { createGatewayProcess } = await import('../../main/gateway/process')
     const gw = createGatewayProcess(18789)
@@ -126,16 +130,18 @@ describe('GatewayProcess', () => {
 
   it('并发 start 会合并到同一个启动任务', async () => {
     spawnMock.mockImplementation(() => createFakeChild())
-    httpGetMock.mockImplementation(((_url: unknown, cb: (res: { statusCode: number; resume: () => void }) => void) => {
-      const req = new EventEmitter() as EventEmitter & {
-        setTimeout: (ms: number, fn: () => void) => void
-        destroy: () => void
+    httpGetMock.mockImplementation(
+      (_url: unknown, cb: (res: { statusCode: number; resume: () => void }) => void) => {
+        const req = new EventEmitter() as EventEmitter & {
+          setTimeout: (ms: number, fn: () => void) => void
+          destroy: () => void
+        }
+        setTimeout(() => cb({ statusCode: 200, resume: () => {} }), 0)
+        req.setTimeout = (_ms, _fn) => {}
+        req.destroy = () => {}
+        return req as never
       }
-      setTimeout(() => cb({ statusCode: 200, resume: () => {} }), 0)
-      req.setTimeout = (_ms, _fn) => {}
-      req.destroy = () => {}
-      return req as never
-    }) as any)
+    )
 
     const { createGatewayProcess } = await import('../../main/gateway/process')
     const gw = createGatewayProcess(18789)
