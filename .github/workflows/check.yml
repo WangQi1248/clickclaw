@@ -24,6 +24,9 @@ jobs:
       - name: 安装依赖
         run: npm ci
 
+      - name: 校验发布版本格式
+        run: npm run release:check-version
+
       - name: TypeScript 编译检查
         run: npm run build
 

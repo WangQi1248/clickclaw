@@ -18,6 +18,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { GatewayProvider } from '../contexts/GatewayContext'
 import TitleBar from '../components/TitleBar'
+import { getCompactVersionLabel } from '../utils/version'
 
 const { Sider, Content } = Layout
 
@@ -118,7 +119,7 @@ function MainLayout(): React.ReactElement {
               pointerEvents: 'none',
             }}
           >
-            {collapsed ? `v${version.split('.')[0] || ''}` : `v${version}`}
+            {collapsed ? `v${getCompactVersionLabel(version)}` : `v${version}`}
           </div>
         </Sider>
 
