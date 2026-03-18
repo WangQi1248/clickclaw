@@ -22,6 +22,7 @@
     "i18n:check": "node scripts/check-i18n.js",
     "i18n:check:unused": "node scripts/check-i18n.js --unused",
     "release:check-version": "node scripts/check-release-version.js",
+    "test:release-rewrite": "node scripts/test-rewrite-latest-yml.js",
     "postinstall": "electron-builder install-app-deps",
     "package:resources": "node scripts/package-resources.js",
     "package:resources:win:x64": "node scripts/package-resources.js --platform win32 --arch x64",

@@ -335,9 +335,12 @@ jobs:
             const lines = content.split(/\r?\n/);
             return lines
               .map((line) => {
-                let m = line.match(/^(\s*url:\s*)(["']?)([^"']+)\2(\s*)$/);
+                // 兼容两种 YAML 写法：
+                // 1) url: xxx
+                // 2) - url: xxx
+                let m = line.match(/^(\s*(?:-\s*)?url:\s*)(["']?)([^"']+)\2(\s*)$/);
                 if (m) return `${m[1]}${m[2]}${mapAssetUrl(m[3])}${m[2]}${m[4]}`;
-                m = line.match(/^(\s*path:\s*)(["']?)([^"']+)\2(\s*)$/);
+                m = line.match(/^(\s*(?:-\s*)?path:\s*)(["']?)([^"']+)\2(\s*)$/);
                 if (m) return `${m[1]}${m[2]}${mapAssetUrl(m[3])}${m[2]}${m[4]}`;
                 return line;
               })
