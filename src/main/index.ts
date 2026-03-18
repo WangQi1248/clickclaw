@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, protocol, net } from 'electron'
+import { app, shell, BrowserWindow, protocol, net, nativeImage } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { detect } from './runtime'
@@ -116,6 +116,23 @@ if (!gotTheLock) {
   })
 
   app.whenReady().then(() => {
+    // macOS 开发态默认会显示 "Electron"，这里强制应用名与 About 信息使用产品名
+    app.setName('ClickClaw')
+    app.setAboutPanelOptions({
+      applicationName: 'ClickClaw',
+      applicationVersion: app.getVersion(),
+      version: app.getVersion(),
+    })
+    if (process.platform === 'darwin' && is.dev) {
+      const dockIconPath = join(__dirname, '../../assets/icon.icns')
+      const dockIcon = nativeImage.createFromPath(dockIconPath)
+      if (!dockIcon.isEmpty()) {
+        app.dock?.setIcon(dockIcon)
+      } else {
+        log.warn('dock icon load failed:', dockIconPath)
+      }
+    }
+
     electronApp.setAppUserModelId('cn.clickclaw.app')
 
     // 注册 app:// 协议处理器，将请求映射到 renderer 静态文件
