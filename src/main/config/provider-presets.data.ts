@@ -544,6 +544,47 @@ export const PROVIDER_PRESETS: Record<string, ProviderPreset> = {
     ],
   },
 
+  xiaomi: {
+    name: '小米 MiMo',
+    group: 'china',
+    color: '#ff6900',
+    initials: 'XM',
+    tagline: '小米推出的 MiMo 模型 API 平台，兼容 Anthropic 协议。',
+    platforms: [
+      {
+        key: 'xiaomi',
+        name: 'Xiaomi MiMo API',
+        baseUrl: 'https://api.xiaomimimo.com/anthropic',
+        api: 'anthropic-messages',
+        apiKeyUrl: 'https://platform.xiaomimimo.com/#/console/api-keys',
+        envKey: 'XIAOMI_API_KEY',
+        models: [
+          {
+            id: 'mimo-v2-pro',
+            name: 'MiMo-V2-Pro',
+            input: ['text'],
+            contextWindow: 1048576,
+            maxTokens: 131072,
+          },
+          {
+            id: 'mimo-v2-omni',
+            name: 'MiMo-V2-Omni',
+            input: ['text', 'image'],
+            contextWindow: 262144,
+            maxTokens: 131072,
+          },
+          {
+            id: 'mimo-v2-flash',
+            name: 'MiMo-V2-Flash',
+            input: ['text'],
+            contextWindow: 262144,
+            maxTokens: 65536,
+          },
+        ],
+      },
+    ],
+  },
+
   qwen: {
     name: '阿里千问',
     group: 'china',

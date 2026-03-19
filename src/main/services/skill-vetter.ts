@@ -438,6 +438,7 @@ function resolveEnvKey(providerKey: string): string {
     moonshot: 'MOONSHOT_API_KEY',
     'moonshot-cn': 'MOONSHOT_API_KEY',
     minimax: 'MINIMAX_API_KEY',
+    xiaomi: 'XIAOMI_API_KEY',
     dashscope: 'DASHSCOPE_API_KEY',
     volcengine: 'VOLCENGINE_API_KEY',
     deepseek: 'DEEPSEEK_API_KEY',
