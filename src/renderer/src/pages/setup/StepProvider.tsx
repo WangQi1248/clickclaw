@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import {
   Alert,
   App,
@@ -136,6 +136,9 @@ function StepProvider({ data, updateData }: Props): React.ReactElement {
   const [mode, setMode] = useState<ProviderMode>(
     data.platformKey === '__custom__' ? 'custom' : 'preset'
   )
+  // 用 ref 追踪 channels 最新值，避免 useEffect 循环依赖
+  const channelsRef = useRef(data.channels)
+  channelsRef.current = data.channels
 
   const [customProviderId, setCustomProviderId] = useState(
     data.platformKey === '__custom__' ? data.providerKey : ''
@@ -213,11 +216,14 @@ function StepProvider({ data, updateData }: Props): React.ReactElement {
 
   const selectProvider = (preset: ProviderPresetForUI) => {
     setMode('preset')
+    // 切回预设时，清除自定义 Provider 在 channels 中的残留
+    const { __customProvider__: _, ...cleanChannels } = channelsRef.current
     updateData({
       providerKey: preset.key,
       platformKey: preset.platforms[0]?.key || '',
       apiKey: '',
       modelId: '',
+      channels: cleanChannels,
     })
     setApiKey('')
     setVerifyState('idle')
@@ -278,7 +284,7 @@ function StepProvider({ data, updateData }: Props): React.ReactElement {
       apiKey: customApiKey.trim(),
       modelId: customModelId.trim(),
       channels: {
-        ...data.channels,
+        ...channelsRef.current,
         __customProvider__: {
           baseUrl: customBaseUrl.trim(),
           apiType: customApiType,
@@ -293,7 +299,6 @@ function StepProvider({ data, updateData }: Props): React.ReactElement {
     customModelId,
     customProviderId,
     customSupportsImage,
-    data.channels,
     isCustomMode,
     updateData,
   ])
