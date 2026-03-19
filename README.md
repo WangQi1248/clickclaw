@@ -163,6 +163,12 @@ WebSocket 直连 Gateway，多会话管理，流式 Markdown 渲染，`/` 快捷
 | macOS | Apple Silicon (arm64) / Intel (x64) |
 | Windows | x64 / arm64 |
 
+### 卸载与数据目录
+
+- Windows 卸载时会提供复选框：`删除 ClickClaw 本地数据 (~/.clickclaw)`，默认不勾选
+- 若不勾选，仅卸载应用程序，`~/.clickclaw` 目录会保留
+- `~/.openclaw`（OpenClaw 配置与凭证）始终保留，不会被 ClickClaw 卸载流程删除
+
 ### 首次启动
 
 Setup 向导会引导你完成所有配置：

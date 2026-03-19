@@ -50,6 +50,7 @@ win:
   icon: assets/icon.ico
 
 nsis:
+  include: build/nsis/uninstall-data.nsh
   oneClick: false
   perMachine: false
   allowToChangeInstallationDirectory: true

@@ -163,6 +163,12 @@ Grab the installer for your platform from [Releases](https://github.com/clickcla
 | macOS | Apple Silicon (arm64) / Intel (x64) |
 | Windows | x64 / arm64 |
 
+### Uninstall & Data Directories
+
+- On Windows uninstall, a checkbox is shown: `Delete ClickClaw local data (~/.clickclaw)` (unchecked by default)
+- If unchecked, only the app is removed and `~/.clickclaw` is kept
+- `~/.openclaw` (OpenClaw config and credentials) is always preserved and is never deleted by ClickClaw uninstall
+
 ### First Launch
 
 The Setup Wizard guides you through all configuration:
