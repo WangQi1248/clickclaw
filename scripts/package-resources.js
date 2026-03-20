@@ -545,12 +545,17 @@ function pruneNodeModules(nmDir) {
   let removedFiles = 0;
 
   function walk(dir, depth, rootPkg) {
-    if (depth > 8) return;
+    if (depth > 64) return;
     let entries;
     try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
 
     for (const entry of entries) {
       const full = path.join(dir, entry.name);
+      if (entry.isSymbolicLink()) {
+        // 清理悬挂符号链接（常见于 node_modules/.bin）
+        try { fs.realpathSync(full); } catch { try { fs.unlinkSync(full); } catch {} }
+        continue;
+      }
       if (entry.isDirectory()) {
         // depth=0 时 entry.name 就是包名；更深层继承上层包名
         const nextRootPkg = depth === 0 ? entry.name : rootPkg;
@@ -582,16 +587,6 @@ function pruneNodeModules(nmDir) {
   }
 
   walk(nmDir, 0, null);
-
-  // 清理 .bin 悬挂符号链接（避免 afterPack 拷贝时 ENOENT）
-  const binDir = path.join(nmDir, ".bin");
-  if (fs.existsSync(binDir)) {
-    for (const entry of fs.readdirSync(binDir, { withFileTypes: true })) {
-      if (!entry.isSymbolicLink()) continue;
-      const lp = path.join(binDir, entry.name);
-      try { fs.realpathSync(lp); } catch { try { fs.unlinkSync(lp); } catch {} }
-    }
-  }
 
   log(`裁剪完成: 删除 ${removedDirs} 个目录、${removedFiles} 个无用文件`);
 }

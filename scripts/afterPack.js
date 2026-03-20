@@ -50,7 +50,13 @@ function copyDirSync(src, dest) {
         fs.copyFileSync(real, d);
         fs.chmodSync(d, fs.statSync(real).mode);
       } catch {
-        fs.copyFileSync(s, d);
+        // 悬挂链接（常见于 node_modules/.bin）直接跳过，避免 ENOENT 中断打包
+        try {
+          const target = fs.readlinkSync(s);
+          console.warn(`[afterPack] 跳过悬挂符号链接: ${s} -> ${target}`);
+        } catch {
+          console.warn(`[afterPack] 跳过无法解析的符号链接: ${s}`);
+        }
       }
     } else {
       fs.copyFileSync(s, d);
