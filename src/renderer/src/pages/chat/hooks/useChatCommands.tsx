@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import type { TFunction } from 'i18next'
+import type React from 'react'
 import {
   InfoCircleOutlined,
   MessageOutlined,
@@ -9,90 +10,98 @@ import {
   ToolOutlined,
 } from '@ant-design/icons'
 
+export interface SlashCommandNode {
+  id: string
+  label: string
+  icon?: React.ReactNode
+  description?: string
+  insertText?: string
+  keywords?: string[]
+  children?: SlashCommandNode[]
+}
+
 export function useChatCommands(t: TFunction) {
   return useMemo(() => {
-    const cmd = (value: string, descKey: string) => ({
+    const leaf = (value: string, descKey: string, keywords?: string[]): SlashCommandNode => ({
+      id: value,
       label: value,
-      value,
-      extra: (
-        <span style={{ fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>
-          {t(`chat.commands.${descKey}`)}
-        </span>
-      ),
+      insertText: value,
+      description: t(`chat.commands.${descKey}`),
+      keywords,
     })
 
     return [
       {
+        id: 'group-session',
         label: t('chat.commands.groupSession'),
-        value: 'group-session',
         icon: <MessageOutlined />,
         children: [
-          cmd('/session', 'session'),
-          cmd('/stop', 'stop'),
-          cmd('/reset', 'reset'),
-          cmd('/new', 'new'),
-          cmd('/compact', 'compact'),
+          leaf('/session', 'session', ['session', 'conversation']),
+          leaf('/stop', 'stop', ['abort']),
+          leaf('/reset', 'reset', ['clear']),
+          leaf('/new', 'new', ['create']),
+          leaf('/compact', 'compact', ['summary']),
         ],
       },
       {
+        id: 'group-options',
         label: t('chat.commands.groupOptions'),
-        value: 'group-options',
         icon: <ThunderboltOutlined />,
         children: [
-          cmd('/usage', 'usage'),
-          cmd('/think', 'think'),
-          cmd('/verbose', 'verbose'),
-          cmd('/reasoning', 'reasoning'),
-          cmd('/elevated', 'elevated'),
-          cmd('/exec', 'exec'),
-          cmd('/model', 'model'),
-          cmd('/models', 'models'),
-          cmd('/queue', 'queue'),
+          leaf('/usage', 'usage'),
+          leaf('/think', 'think'),
+          leaf('/verbose', 'verbose'),
+          leaf('/reasoning', 'reasoning'),
+          leaf('/elevated', 'elevated'),
+          leaf('/exec', 'exec'),
+          leaf('/model', 'model'),
+          leaf('/models', 'models'),
+          leaf('/queue', 'queue'),
         ],
       },
       {
+        id: 'group-status',
         label: t('chat.commands.groupStatus'),
-        value: 'group-status',
         icon: <InfoCircleOutlined />,
         children: [
-          cmd('/help', 'help'),
-          cmd('/commands', 'commands'),
-          cmd('/status', 'status'),
-          cmd('/context', 'context'),
-          cmd('/export-session', 'exportSession'),
-          cmd('/whoami', 'whoami'),
+          leaf('/help', 'help'),
+          leaf('/commands', 'commands'),
+          leaf('/status', 'status'),
+          leaf('/context', 'context'),
+          leaf('/export-session', 'exportSession'),
+          leaf('/whoami', 'whoami'),
         ],
       },
       {
+        id: 'group-management',
         label: t('chat.commands.groupManagement'),
-        value: 'group-management',
         icon: <SettingOutlined />,
         children: [
-          cmd('/allowlist', 'allowlist'),
-          cmd('/approve', 'approve'),
-          cmd('/subagents', 'subagents'),
-          cmd('/acp', 'acp'),
-          cmd('/focus', 'focus'),
-          cmd('/unfocus', 'unfocus'),
-          cmd('/agents', 'agents'),
-          cmd('/kill', 'kill'),
-          cmd('/steer', 'steer'),
-          cmd('/activation', 'activation'),
-          cmd('/send', 'send'),
+          leaf('/allowlist', 'allowlist'),
+          leaf('/approve', 'approve'),
+          leaf('/subagents', 'subagents'),
+          leaf('/acp', 'acp'),
+          leaf('/focus', 'focus'),
+          leaf('/unfocus', 'unfocus'),
+          leaf('/agents', 'agents'),
+          leaf('/kill', 'kill'),
+          leaf('/steer', 'steer'),
+          leaf('/activation', 'activation'),
+          leaf('/send', 'send'),
         ],
       },
       {
+        id: 'group-media',
         label: t('chat.commands.groupMedia'),
-        value: 'group-media',
         icon: <SoundOutlined />,
-        children: [cmd('/tts', 'tts')],
+        children: [leaf('/tts', 'tts')],
       },
       {
+        id: 'group-tools',
         label: t('chat.commands.groupTools'),
-        value: 'group-tools',
         icon: <ToolOutlined />,
-        children: [cmd('/skill', 'skill'), cmd('/restart', 'restart')],
+        children: [leaf('/skill', 'skill'), leaf('/restart', 'restart')],
       },
-    ]
+    ] as SlashCommandNode[]
   }, [t])
 }

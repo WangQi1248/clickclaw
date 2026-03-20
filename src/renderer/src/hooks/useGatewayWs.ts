@@ -142,6 +142,7 @@ export interface UseGatewayWsReturn {
   sessionKey: string | null
   errorMsg: string | null
   messages: ChatMessage[]
+  historyLoading: boolean
   /** Gateway 进程是否处于运行状态（独立于 WS 连接状态） */
   gatewayRunning: boolean
   /** 是否正在流式输出 */
@@ -177,6 +178,7 @@ export function useGatewayWs(): UseGatewayWsReturn {
   const [sessionKey, setSessionKey] = useState<string | null>(null)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
   const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [historyLoading, setHistoryLoading] = useState(false)
   const [isStreaming, setIsStreaming] = useState(false)
   const [gatewayRunning, setGatewayRunning] = useState(false)
   const [sessions, setSessions] = useState<SessionItem[]>([])
@@ -208,6 +210,8 @@ export function useGatewayWs(): UseGatewayWsReturn {
   const doConnectRef = useRef<(() => void) | null>(null)
   /** autoPairAndReconnect 函数引用（用于打破循环依赖） */
   const autoPairAndReconnectRef = useRef<(() => Promise<void>) | null>(null)
+  /** 最近浏览过的会话历史缓存，减少切换闪白 */
+  const messageCacheRef = useRef<Map<string, ChatMessage[]>>(new Map())
 
   const loadGatewayAuthContext = useCallback(async (): Promise<void> => {
     const [token, deviceId] = await Promise.all([
@@ -306,6 +310,7 @@ export function useGatewayWs(): UseGatewayWsReturn {
 
   const loadHistory = useCallback(
     (key: string): void => {
+      setHistoryLoading(true)
       rpc('chat.history', { sessionKey: key, limit: 200 })
         .then((result) => {
           const data = result as { messages?: unknown[] } | null
@@ -330,9 +335,17 @@ export function useGatewayWs(): UseGatewayWsReturn {
               } as ChatMessage
             })
             .filter((m): m is ChatMessage => m !== null)
-          setMessages(loaded)
+          messageCacheRef.current.set(key, loaded)
+          if (sessionKeyRef.current === key) {
+            setMessages(loaded)
+          }
         })
         .catch(() => {})
+        .finally(() => {
+          if (sessionKeyRef.current === key) {
+            setHistoryLoading(false)
+          }
+        })
     },
     [rpc]
   )
@@ -688,7 +701,10 @@ export function useGatewayWs(): UseGatewayWsReturn {
           setStatus('disconnected')
           setErrorMsg(null)
           setSessionKey(null)
+          setMessages([])
+          setHistoryLoading(false)
           setSessions([])
+          messageCacheRef.current.clear()
           tokenRef.current = ''
           deviceIdRef.current = ''
         }
@@ -747,7 +763,11 @@ export function useGatewayWs(): UseGatewayWsReturn {
         content: text,
         attachments: attachments?.length ? attachments : undefined,
       }
-      setMessages((prev) => [...prev, userMsg])
+      setMessages((prev) => {
+        const next = [...prev, userMsg]
+        messageCacheRef.current.set(key, next)
+        return next
+      })
 
       const params: Record<string, unknown> = {
         sessionKey: key,
@@ -761,10 +781,14 @@ export function useGatewayWs(): UseGatewayWsReturn {
 
       // 立即设置 streaming 状态 + 追加 loading 占位气泡，消除网络延迟空窗期
       setIsStreaming(true)
-      setMessages((prev) => [
-        ...prev,
-        { id: nextId('pending-ai'), role: 'assistant', content: '', streaming: true },
-      ])
+      setMessages((prev) => {
+        const next: ChatMessage[] = [
+          ...prev,
+          { id: nextId('pending-ai'), role: 'assistant', content: '', streaming: true },
+        ]
+        messageCacheRef.current.set(key, next)
+        return next
+      })
 
       rpc('chat.send', params).catch((err) => {
         // RPC 失败时回滚 loading 气泡并重置 isStreaming
@@ -796,7 +820,10 @@ export function useGatewayWs(): UseGatewayWsReturn {
       if (key === sessionKeyRef.current) return
       setSessionKey(key)
       sessionKeyRef.current = key
-      setMessages([])
+      const cached = messageCacheRef.current.get(key)
+      if (cached) {
+        setMessages(cached)
+      }
       loadHistory(key)
     },
     [loadHistory]
@@ -847,6 +874,7 @@ export function useGatewayWs(): UseGatewayWsReturn {
       // 乐观更新：重置当前会话时立即清空消息
       if (key === sessionKeyRef.current) {
         setMessages([])
+        messageCacheRef.current.set(key, [])
       }
 
       return rpc('sessions.reset', { key }) as Promise<void>
@@ -865,6 +893,7 @@ export function useGatewayWs(): UseGatewayWsReturn {
     sessionKey,
     errorMsg,
     messages,
+    historyLoading,
     gatewayRunning,
     isStreaming,
     sessions,

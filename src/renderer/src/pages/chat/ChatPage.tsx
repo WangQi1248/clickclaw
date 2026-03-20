@@ -1,12 +1,13 @@
 /**
  * 实时聊天页面（完整版）
  * 左侧：会话列表（Conversations）
- * 右侧：消息区域 + Sender（带附件面板和快捷指令）
+ * 右侧：消息区域 + Sender（带附件面板）
  */
 
-import { Bubble, Sender, Welcome, Attachments, Suggestion } from '@ant-design/x'
-import { App, Button, Spin, Typography, Layout, theme } from 'antd'
+import { Bubble, Sender, Welcome, Attachments } from '@ant-design/x'
+import { App, Button, Divider, Dropdown, Flex, GetRef, Spin, Typography, Layout, theme } from 'antd'
 import {
+  DownOutlined,
   PlayCircleOutlined,
   WifiOutlined,
   LoadingOutlined,
@@ -14,18 +15,21 @@ import {
   RocketOutlined,
   CheckCircleOutlined,
 } from '@ant-design/icons'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useGatewayContext } from '../../contexts/GatewayContext'
 import { ChatEmptyState } from './components/ChatEmptyState'
-import { ChatSessionModal } from './components/ChatSessionModal'
 import { ChatSessionsSider } from './components/ChatSessionsSider'
+import { SlashCommandPanel } from './components/SlashCommandPanel'
 import { StatusBar } from './components/StatusBar'
 import { useChatBubbles } from './hooks/useChatBubbles'
 import { useChatCommands } from './hooks/useChatCommands'
 import { useChatComposer } from './hooks/useChatComposer'
 import { useChatConnectionUi } from './hooks/useChatConnectionUi'
+import { useChatModelSwitcher } from './hooks/useChatModelSwitcher'
 import { useChatPrompts } from './hooks/useChatPrompts'
 import { useChatSessions } from './hooks/useChatSessions'
+import { useSlashCommandMenu } from './hooks/useSlashCommandMenu'
 
 const { Title, Paragraph } = Typography
 const { Content } = Layout
@@ -36,10 +40,12 @@ function ChatPage(): React.ReactElement {
   const { t } = useTranslation()
   const { token } = theme.useToken()
   const { message: msg, modal } = App.useApp()
+  const senderRef = useRef<GetRef<typeof Sender>>(null)
 
   const {
     status,
     messages,
+    historyLoading,
     isStreaming,
     errorMsg,
     gatewayRunning,
@@ -53,19 +59,11 @@ function ChatPage(): React.ReactElement {
     deleteSession,
     resetSession,
     sessionKey,
+    callRpc,
   } = useGatewayContext()
 
   const {
-    newSessionVisible,
-    setNewSessionVisible,
-    newSessionName,
-    setNewSessionName,
-    newSessionAgentId,
-    setNewSessionAgentId,
-    agentOptions,
-    loadingAgents,
     handleOpenNewSession,
-    handleConfirmNewSession,
     handleDeleteSession,
     handleResetSession,
   } = useChatSessions({
@@ -94,16 +92,67 @@ function ChatPage(): React.ReactElement {
     setAttachOpen,
     attachRef,
     handleSend,
-    handleCommandSelect,
   } = useChatComposer({ sendMessage })
 
-  const slashCommands = useChatCommands(t)
+  const {
+    modelOptions,
+    currentModel,
+    defaultModel,
+    loadingModels,
+    switchingModel,
+    modelSelectDisabled,
+    handleModelChange,
+  } = useChatModelSwitcher({
+    status,
+    sessionKey,
+    isStreaming,
+    callRpc,
+    onSwitched: (model) => {
+      msg.success(
+        model
+          ? t('chat.model.switchSuccess', { model })
+          : t('chat.model.switchDefaultSuccess')
+      )
+    },
+  })
+
   const quickPrompts = useChatPrompts(t)
+  const slashCommands = useChatCommands(t)
   const { bubbleItems, bubbleRoles } = useChatBubbles({
     messages,
     tokenColorTextSecondary: token.colorTextSecondary,
     onCopied: () => msg.success(t('common.copied')),
   })
+  const slashMenu = useSlashCommandMenu({
+    commands: slashCommands,
+    onApplyCommand: (nextValue, cursor) => {
+      setInputValue(nextValue)
+      requestAnimationFrame(() => {
+        const input = senderRef.current?.inputElement as HTMLTextAreaElement | undefined
+        if (!input) return
+        input.focus()
+        input.setSelectionRange(cursor, cursor)
+      })
+    },
+  })
+  const effectiveModel = currentModel || defaultModel
+  const selectedModelLabel =
+    modelOptions.find((item) => item.value === currentModel)?.label ||
+    modelOptions.find((item) => item.value === defaultModel)?.label ||
+    effectiveModel.split('/').pop() ||
+    t('chat.model.defaultOptionEmpty')
+  const modelMenuItems = [
+    {
+      key: '__default__',
+      label: defaultModel
+        ? t('chat.model.defaultOption', { model: defaultModel })
+        : t('chat.model.defaultOptionEmpty'),
+    },
+    ...modelOptions.map((option) => ({
+      key: option.value,
+      label: option.label,
+    })),
+  ]
 
   // ========== Gateway 未运行状态 ==========
 
@@ -239,20 +288,6 @@ function ChatPage(): React.ReactElement {
 
   return (
     <Layout style={{ height: '100%' }}>
-      {/* 新建会话弹窗 */}
-      <ChatSessionModal
-        open={newSessionVisible}
-        newSessionName={newSessionName}
-        setNewSessionName={setNewSessionName}
-        newSessionAgentId={newSessionAgentId}
-        setNewSessionAgentId={setNewSessionAgentId}
-        defaultAgentId={defaultAgentId}
-        loadingAgents={loadingAgents}
-        agentOptions={agentOptions}
-        onConfirm={handleConfirmNewSession}
-        onCancel={() => setNewSessionVisible(false)}
-      />
-
       <ChatSessionsSider
         status={status}
         isStreaming={isStreaming}
@@ -275,7 +310,20 @@ function ChatPage(): React.ReactElement {
 
         {/* 消息区域 */}
         <div ref={messagesContainerRef} style={{ flex: 1, overflow: 'auto', padding: '16px 24px' }}>
-          {messages.length === 0 ? (
+          {historyLoading && messages.length === 0 ? (
+            <div
+              style={{
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Spin tip={t('chat.status.loadingHistory')}>
+                <div style={{ width: 240, height: 120 }} />
+              </Spin>
+            </div>
+          ) : messages.length === 0 ? (
             <ChatEmptyState quickPrompts={quickPrompts} onPromptSelect={setInputValue} t={t} />
           ) : (
             <Bubble.List
@@ -296,58 +344,153 @@ function ChatPage(): React.ReactElement {
           }}
         >
           <div style={{ maxWidth: 800, margin: '0 auto' }}>
-            <Suggestion items={slashCommands} onSelect={handleCommandSelect}>
-              {({ onTrigger, onKeyDown }) => (
-                <Sender
-                  value={inputValue}
-                  onChange={(nextVal) => {
-                    if (nextVal === '/') onTrigger()
-                    else if (!nextVal) onTrigger(false)
-                    setInputValue(nextVal)
-                  }}
-                  onKeyDown={onKeyDown}
-                  disabled={status !== 'ready'}
-                  loading={isStreaming}
-                  placeholder={
-                    status !== 'ready'
-                      ? t('chat.sender.waitingGateway')
-                      : t('chat.sender.placeholder')
-                  }
-                  onSubmit={handleSend}
-                  onCancel={abortMessage}
-                  header={
-                    <Sender.Header
-                      title={t('chat.attachments.title')}
-                      open={attachOpen}
-                      onOpenChange={setAttachOpen}
-                      closable
-                    >
-                      <Attachments
-                        ref={attachRef}
-                        items={attachFiles}
-                        onChange={({ fileList }) => setAttachFiles(fileList)}
-                        beforeUpload={() => false}
-                        placeholder={{
-                          icon: <PaperClipOutlined />,
-                          title: t('chat.attachments.placeholder'),
-                          description: t('chat.attachments.supportedTypes'),
-                        }}
-                        overflow="scrollX"
-                      />
-                    </Sender.Header>
-                  }
-                  prefix={
-                    <Button
-                      type="text"
-                      icon={<PaperClipOutlined />}
-                      onClick={() => setAttachOpen(!attachOpen)}
-                      style={{ color: attachFiles.length > 0 ? '#FF4D2A' : undefined }}
-                      title={t('chat.attachments.addFile')}
-                    />
-                  }
+            <div style={{ position: 'relative' }}>
+              {slashMenu.open ? (
+                <SlashCommandPanel
+                  items={slashMenu.items}
+                  level={slashMenu.level}
+                  query={slashMenu.query}
+                  pathLabels={slashMenu.pathLabels}
+                  canGoBack={slashMenu.canGoBack}
+                  activeIndex={slashMenu.activeIndex}
+                  onHover={slashMenu.setActiveIndex}
+                  onSelect={(index) => slashMenu.handleItemClick(index, inputValue)}
+                  onGoBack={slashMenu.goBack}
+                  t={t}
                 />
-              )}
-            </Suggestion>
+              ) : null}
+              <Sender
+                ref={senderRef}
+                value={inputValue}
+                onChange={(nextValue, event) => {
+                  setInputValue(nextValue)
+                  const cursor = event?.currentTarget.selectionStart ?? nextValue.length
+                  slashMenu.handleInputChange(nextValue, cursor)
+                }}
+                onKeyDown={(event) => {
+                  const handled = slashMenu.handleKeyDown(event, inputValue)
+                  if (handled) return false
+                  return undefined
+                }}
+                onBlur={() => slashMenu.closeMenu()}
+                disabled={status !== 'ready'}
+                loading={isStreaming}
+                placeholder={
+                  status !== 'ready' ? t('chat.sender.waitingGateway') : t('chat.sender.placeholder')
+                }
+                onSubmit={handleSend}
+                onCancel={abortMessage}
+                footer={(actionNode) => (
+                  <Flex justify="space-between" align="center" gap={12} style={{ width: '100%' }}>
+                    <Flex align="center" gap={8} style={{ minWidth: 0, flex: 1 }}>
+                      <Button
+                        type="text"
+                        icon={<PaperClipOutlined />}
+                        onClick={() => setAttachOpen(!attachOpen)}
+                        style={{ color: attachFiles.length > 0 ? '#FF4D2A' : undefined }}
+                        title={t('chat.attachments.addFile')}
+                      />
+                      <Divider type="vertical" style={{ margin: 0 }} />
+                      <span
+                        style={{
+                          fontSize: 12,
+                          color: token.colorTextSecondary,
+                          flexShrink: 0,
+                        }}
+                      >
+                        {t('chat.model.label')}
+                      </span>
+                      <Dropdown
+                        trigger={['click']}
+                        menu={{
+                          items: modelMenuItems,
+                          selectable: true,
+                          selectedKeys: [currentModel || '__default__'],
+                          onClick: ({ key }) => {
+                            handleModelChange(key === '__default__' ? '' : String(key)).catch(
+                              (error: Error) => {
+                                msg.error(t('chat.model.switchFailed', { error: error.message }))
+                              }
+                            )
+                          },
+                        }}
+                        disabled={modelSelectDisabled}
+                      >
+                        <Button
+                          type="text"
+                          loading={loadingModels || switchingModel}
+                          disabled={modelSelectDisabled}
+                          style={{
+                            borderRadius: 999,
+                            background: token.colorFillTertiary,
+                            color: token.colorText,
+                            paddingInline: 14,
+                            height: 32,
+                            minWidth: 140,
+                            justifyContent: 'space-between',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 8,
+                          }}
+                        >
+                          <span
+                            style={{
+                              maxWidth: 180,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {selectedModelLabel}
+                          </span>
+                          <DownOutlined style={{ fontSize: 11, color: token.colorTextTertiary }} />
+                        </Button>
+                      </Dropdown>
+                      <span
+                        style={{
+                          fontSize: 12,
+                          color: token.colorTextTertiary,
+                          minWidth: 0,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                        title={sessionKey || t('chat.model.noSession')}
+                      >
+                        {sessionKey || t('chat.model.noSession')}
+                      </span>
+                    </Flex>
+                    <Flex align="center" gap={8} flex="none">
+                      <Divider type="vertical" style={{ margin: 0 }} />
+                      {actionNode}
+                    </Flex>
+                  </Flex>
+                )}
+                header={
+                  <Sender.Header
+                    title={t('chat.attachments.title')}
+                    open={attachOpen}
+                    onOpenChange={setAttachOpen}
+                    closable
+                  >
+                    <Attachments
+                      ref={attachRef}
+                      items={attachFiles}
+                      onChange={({ fileList }) => setAttachFiles(fileList)}
+                      beforeUpload={() => false}
+                      placeholder={{
+                        icon: <PaperClipOutlined />,
+                        title: t('chat.attachments.placeholder'),
+                        description: t('chat.attachments.supportedTypes'),
+                      }}
+                      overflow="scrollX"
+                    />
+                  </Sender.Header>
+                }
+                prefix={false}
+                suffix={false}
+              />
+            </div>
             {/* 附件计数提示 */}
             {attachFiles.length > 0 && (
               <div style={{ marginTop: 4, fontSize: 12, color: '#FF4D2A' }}>

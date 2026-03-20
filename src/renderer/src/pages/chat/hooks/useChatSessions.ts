@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 
 interface UseChatSessionsArgs {
   defaultAgentId: string
@@ -34,55 +34,16 @@ export function useChatSessions({
   modalApi,
   t,
 }: UseChatSessionsArgs) {
-  const [newSessionVisible, setNewSessionVisible] = useState(false)
-  const [newSessionName, setNewSessionName] = useState('')
-  const [newSessionAgentId, setNewSessionAgentId] = useState('')
-  const [agentOptions, setAgentOptions] = useState<{ value: string; label: string }[]>([])
-  const [loadingAgents, setLoadingAgents] = useState(false)
-
-  const handleOpenNewSession = useCallback(async (): Promise<void> => {
-    setNewSessionName('')
-    setNewSessionAgentId(defaultAgentId)
-    setNewSessionVisible(true)
-    setLoadingAgents(true)
-    try {
-      const list = (await window.api.agent.list()) as Array<{
-        id: string
-        name?: string
-        identity?: { name?: string; emoji?: string }
-        default?: boolean
-      }>
-      const opts = list.map((a) => {
-        const displayName = a.identity?.name || a.name || a.id
-        const emoji = a.identity?.emoji
-        return {
-          value: a.id,
-          label: emoji ? `${emoji} ${displayName}` : displayName,
-        }
-      })
-      if (defaultAgentId && !opts.find((o) => o.value === defaultAgentId)) {
-        opts.unshift({ value: defaultAgentId, label: `${defaultAgentId} (默认)` })
-      }
-      setAgentOptions(opts)
-    } catch {
-      setAgentOptions(
-        defaultAgentId ? [{ value: defaultAgentId, label: `${defaultAgentId} (默认)` }] : []
-      )
-    } finally {
-      setLoadingAgents(false)
-    }
-  }, [defaultAgentId])
-
-  const handleConfirmNewSession = useCallback((): void => {
-    const name = newSessionName.trim()
-    if (!name) {
-      messageApi.warning(t('chat.sessions.newSessionNameRequired'))
-      return
-    }
-    newSession(name, newSessionAgentId || defaultAgentId)
+  const handleOpenNewSession = useCallback((): void => {
+    const now = new Date()
+    const autoName = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(
+      now.getDate()
+    ).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(
+      now.getMinutes()
+    ).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`
+    newSession(autoName, defaultAgentId)
     messageApi.success(t('chat.sessions.newSessionSuccess'))
-    setNewSessionVisible(false)
-  }, [newSessionName, messageApi, t, newSession, newSessionAgentId, defaultAgentId])
+  }, [defaultAgentId, messageApi, newSession, t])
 
   const handleDeleteSession = useCallback(
     (key: string): void => {
@@ -121,16 +82,7 @@ export function useChatSessions({
   )
 
   return {
-    newSessionVisible,
-    setNewSessionVisible,
-    newSessionName,
-    setNewSessionName,
-    newSessionAgentId,
-    setNewSessionAgentId,
-    agentOptions,
-    loadingAgents,
     handleOpenNewSession,
-    handleConfirmNewSession,
     handleDeleteSession,
     handleResetSession,
   }

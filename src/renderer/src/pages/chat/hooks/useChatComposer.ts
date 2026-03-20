@@ -33,10 +33,6 @@ export function useChatComposer({ sendMessage }: UseChatComposerArgs) {
     [attachFiles, sendMessage]
   )
 
-  const handleCommandSelect = useCallback((itemVal: string) => {
-    setInputValue(itemVal + ' ')
-  }, [])
-
   return {
     inputValue,
     setInputValue,
@@ -46,6 +42,5 @@ export function useChatComposer({ sendMessage }: UseChatComposerArgs) {
     setAttachOpen,
     attachRef,
     handleSend,
-    handleCommandSelect,
   }
 }

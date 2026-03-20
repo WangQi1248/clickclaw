@@ -273,10 +273,21 @@
       "connecting": "Connecting to Gateway...",
       "handshaking": "Handshaking...",
       "error": "Connection failed",
-      "retry": "Retry"
+      "retry": "Retry",
+      "loadingHistory": "Loading session history..."
+    },
+    "model": {
+      "label": "Model",
+      "placeholder": "Select session model",
+      "defaultOption": "Default ({{model}})",
+      "defaultOptionEmpty": "Default model",
+      "switchSuccess": "Switched to model: {{model}}",
+      "switchDefaultSuccess": "Switched to the default model",
+      "switchFailed": "Failed to switch model: {{error}}",
+      "noSession": "No session selected"
     },
     "sender": {
-      "placeholder": "Send a message (/ for commands, Enter to send, Shift+Enter for new line)",
+      "placeholder": "Send a message (Enter to send, Shift+Enter for a new line)",
       "waitingGateway": "Waiting for Gateway...",
       "newSession": "New Session"
     },
@@ -368,7 +379,14 @@
       "send": "Set send policy",
       "tts": "Control text-to-speech",
       "skill": "Run a skill by name",
-      "restart": "Restart OpenClaw"
+      "restart": "Restart OpenClaw",
+      "panel": {
+        "root": "Slash commands",
+        "submenu": "Subcommands",
+        "empty": "No matching commands",
+        "back": "Back",
+        "searchPlaceholder": "Search commands..."
+      }
     }
   },
   "models": {
