@@ -240,7 +240,6 @@ export function useChatModelSwitcher({
       currentModel,
       defaultModel,
       fetchSessionModelState,
-      loadCurrentSessionModel,
       onSwitched,
       sessionKey,
       status,

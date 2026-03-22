@@ -1244,7 +1244,13 @@ export function useGatewayWs(): UseGatewayWsReturn {
         }
       }
     },
-    [sendConnectFrame, handleChatEvent, handleRealtimeMessageEvent, handleAgentToolEvent]
+    [
+      sendConnectFrame,
+      handleChatEvent,
+      handleRealtimeMessageEvent,
+      handleAgentToolEvent,
+      writeDebugLog,
+    ]
   )
 
   // ========== 连接管理 ==========
