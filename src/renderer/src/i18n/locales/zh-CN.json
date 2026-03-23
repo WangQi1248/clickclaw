@@ -867,6 +867,10 @@
       "updated": "规则已更新",
       "deleted": "规则已删除",
       "deleteConfirmTitle": "确定删掉这条规则吗？",
+      "intro": {
+        "title": "这个功能是做消息分流的",
+        "description": "先选「交给哪个智能体」，再选「消息来自哪个渠道」，账号可选不填。这样不同渠道/账号的消息就会自动分给对应智能体。"
+      },
       "table": {
         "order": "顺序",
         "agent": "智能体",
@@ -874,7 +878,19 @@
         "accountId": "账户 ID",
         "priority": "优先级",
         "match": "命中条件",
-        "actions": "操作"
+        "actions": "操作",
+        "actionsMoveUp": "上移",
+        "actionsMoveDown": "下移",
+        "actionsEdit": "编辑",
+        "actionsDelete": "删除",
+        "matchSummary": {
+          "default": "按渠道 + 账号匹配",
+          "peer": "聊天对象：{{kind}}（{{id}}）",
+          "guild": "服务器：{{id}}",
+          "team": "团队：{{id}}",
+          "roles": "角色：{{ids}}",
+          "separator": "；"
+        }
       },
       "form": {
         "agent": "交给哪个智能体",

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import {
   AutoComplete,
+  Alert,
   App,
   Button,
   Collapse,
@@ -65,13 +66,13 @@ function parseRoles(text?: string): string[] | undefined {
 }
 
 function formatMatchSummary(rule: BindingRouteRule): string {
-  const parts: string[] = []
   const match = rule.match || {}
-  if (match.peer?.kind && match.peer?.id) parts.push(`peer=${match.peer.kind}:${match.peer.id}`)
-  if (match.guildId) parts.push(`guild=${match.guildId}`)
-  if (match.teamId) parts.push(`team=${match.teamId}`)
+  const parts: string[] = []
+  if (match.peer?.kind && match.peer?.id) parts.push(`peer:${match.peer.kind}:${match.peer.id}`)
+  if (match.guildId) parts.push(`guild:${match.guildId}`)
+  if (match.teamId) parts.push(`team:${match.teamId}`)
   if (Array.isArray(match.roles) && match.roles.length > 0)
-    parts.push(`roles=${match.roles.join(',')}`)
+    parts.push(`roles:${match.roles.join(',')}`)
   return parts.length > 0 ? parts.join(' | ') : '-'
 }
 
@@ -311,9 +312,42 @@ export function BindingRulesDrawer({
       key: 'match',
       width: 320,
       render: (_value, rule) => {
-        const summary = formatMatchSummary(rule)
+        const match = rule.match || {}
+        const summaryParts: string[] = []
+        if (match.peer?.kind && match.peer?.id) {
+          const peerKindKey =
+            `channels.bindingRules.form.peerKindOptions.${match.peer.kind}` as const
+          summaryParts.push(
+            t('channels.bindingRules.table.matchSummary.peer', {
+              kind: t(peerKindKey),
+              id: match.peer.id,
+            })
+          )
+        }
+        if (match.guildId) {
+          summaryParts.push(
+            t('channels.bindingRules.table.matchSummary.guild', { id: match.guildId })
+          )
+        }
+        if (match.teamId) {
+          summaryParts.push(
+            t('channels.bindingRules.table.matchSummary.team', { id: match.teamId })
+          )
+        }
+        if (Array.isArray(match.roles) && match.roles.length > 0) {
+          summaryParts.push(
+            t('channels.bindingRules.table.matchSummary.roles', {
+              ids: match.roles.join(', '),
+            })
+          )
+        }
+        const summary =
+          summaryParts.length > 0
+            ? summaryParts.join(t('channels.bindingRules.table.matchSummary.separator'))
+            : t('channels.bindingRules.table.matchSummary.default')
+        const rawSummary = formatMatchSummary(rule)
         return (
-          <Tooltip title={summary}>
+          <Tooltip title={`${summary}\n${rawSummary}`}>
             <Typography.Text
               style={{
                 display: 'inline-block',
@@ -337,27 +371,47 @@ export function BindingRulesDrawer({
       width: 180,
       render: (_value, rule, index) => (
         <Space size={4}>
-          <Button
-            size="small"
-            icon={<UpOutlined />}
-            disabled={index === 0}
-            loading={movingId === rule.id}
-            onClick={() => void handleMove(rule.id, 'up')}
-          />
-          <Button
-            size="small"
-            icon={<DownOutlined />}
-            disabled={index === rules.length - 1}
-            loading={movingId === rule.id}
-            onClick={() => void handleMove(rule.id, 'down')}
-          />
-          <Button size="small" icon={<EditOutlined />} onClick={() => openEdit(rule)} />
+          <Tooltip title={t('channels.bindingRules.table.actionsMoveUp')}>
+            <Button
+              size="small"
+              icon={<UpOutlined />}
+              aria-label={t('channels.bindingRules.table.actionsMoveUp')}
+              disabled={index === 0}
+              loading={movingId === rule.id}
+              onClick={() => void handleMove(rule.id, 'up')}
+            />
+          </Tooltip>
+          <Tooltip title={t('channels.bindingRules.table.actionsMoveDown')}>
+            <Button
+              size="small"
+              icon={<DownOutlined />}
+              aria-label={t('channels.bindingRules.table.actionsMoveDown')}
+              disabled={index === rules.length - 1}
+              loading={movingId === rule.id}
+              onClick={() => void handleMove(rule.id, 'down')}
+            />
+          </Tooltip>
+          <Tooltip title={t('channels.bindingRules.table.actionsEdit')}>
+            <Button
+              size="small"
+              icon={<EditOutlined />}
+              aria-label={t('channels.bindingRules.table.actionsEdit')}
+              onClick={() => openEdit(rule)}
+            />
+          </Tooltip>
           <Popconfirm
             title={t('channels.bindingRules.deleteConfirmTitle')}
             onConfirm={() => void handleDelete(rule.id)}
             okButtonProps={{ danger: true, loading: deletingId === rule.id }}
           >
-            <Button size="small" danger icon={<DeleteOutlined />} />
+            <Tooltip title={t('channels.bindingRules.table.actionsDelete')}>
+              <Button
+                size="small"
+                danger
+                icon={<DeleteOutlined />}
+                aria-label={t('channels.bindingRules.table.actionsDelete')}
+              />
+            </Tooltip>
           </Popconfirm>
         </Space>
       ),
@@ -395,6 +449,13 @@ export function BindingRulesDrawer({
           </Space>
         }
       >
+        <Alert
+          type="info"
+          showIcon
+          style={{ marginBottom: 12 }}
+          message={t('channels.bindingRules.intro.title')}
+          description={t('channels.bindingRules.intro.description')}
+        />
         <Table<BindingRouteRule>
           rowKey="id"
           size="small"

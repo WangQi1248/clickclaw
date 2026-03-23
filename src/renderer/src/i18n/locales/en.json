@@ -865,6 +865,10 @@
       "updated": "Rule updated",
       "deleted": "Rule deleted",
       "deleteConfirmTitle": "Delete this rule now?",
+      "intro": {
+        "title": "This feature routes messages automatically",
+        "description": "Step 1: choose the target agent. Step 2: choose the source channel. Account is optional. Messages from different channels/accounts will then be routed automatically."
+      },
       "table": {
         "order": "Order",
         "agent": "Agent",
@@ -872,7 +876,19 @@
         "accountId": "Account ID",
         "priority": "Priority",
         "match": "When It Matches",
-        "actions": "Actions"
+        "actions": "Actions",
+        "actionsMoveUp": "Move up",
+        "actionsMoveDown": "Move down",
+        "actionsEdit": "Edit",
+        "actionsDelete": "Delete",
+        "matchSummary": {
+          "default": "Match by channel + account",
+          "peer": "Chat target: {{kind}} ({{id}})",
+          "guild": "Guild: {{id}}",
+          "team": "Team: {{id}}",
+          "roles": "Roles: {{ids}}",
+          "separator": "; "
+        }
       },
       "form": {
         "agent": "Which agent should handle this",
