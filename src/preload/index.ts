@@ -201,10 +201,14 @@ const api = {
 
   binding: {
     list: (): Promise<unknown[]> => ipcRenderer.invoke('binding:list'),
+    listRules: (): Promise<unknown[]> => ipcRenderer.invoke('binding:list-rules'),
     save: (agentId: string, channel: string, accountId: string): Promise<void> =>
       ipcRenderer.invoke('binding:save', agentId, channel, accountId),
+    saveRule: (rule: unknown): Promise<unknown> => ipcRenderer.invoke('binding:save-rule', rule),
     delete: (channel: string, accountId: string): Promise<void> =>
       ipcRenderer.invoke('binding:delete', channel, accountId),
+    deleteRule: (id: string): Promise<void> => ipcRenderer.invoke('binding:delete-rule', id),
+    reorder: (ids: string[]): Promise<unknown[]> => ipcRenderer.invoke('binding:reorder', ids),
   },
 
   appState: {
