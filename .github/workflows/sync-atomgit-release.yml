@@ -68,6 +68,18 @@ jobs:
           set -euo pipefail
           git fetch origin '+refs/heads/*:refs/remotes/origin/*' '+refs/tags/*:refs/tags/*'
 
+      - name: 配置 AtomGit /etc/hosts 代理解析
+        if: steps.release_check.outputs.exists == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "159.138.147.37 api.atomgit.com" | sudo tee -a /etc/hosts
+          echo "159.138.147.37 file.atomgit.com" | sudo tee -a /etc/hosts
+          echo "159.138.147.37 file.gitcode.com" | sudo tee -a /etc/hosts
+          getent hosts api.atomgit.com
+          getent hosts file.atomgit.com
+          getent hosts file.gitcode.com
+
       - name: 推送代码和标签到 AtomGit
         if: steps.release_check.outputs.exists == 'true'
         env:
