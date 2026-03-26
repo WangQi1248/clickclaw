@@ -25,7 +25,7 @@
   Website: <a href="https://www.clickclaw.cn">clickclaw.cn</a> ·
   Mirrors: <a href="https://www.clickclaw.cloud">clickclaw.cloud</a> /
   <a href="https://www.clickclaw.icu">clickclaw.icu</a><br/>
-  Source Code: <a href="https://github.com/OpenClaw/clickclaw">GitHub</a> ·
+  Source Code: <a href="https://github.com/clickclaw/clickclaw">GitHub</a> ·
   <a href="https://atomgit.com/clickclaw/clickclaw">AtomGit</a>
 </p>
 
