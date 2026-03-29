@@ -133,7 +133,6 @@ export async function createAgentViaCli(
   const args = [
     'agents',
     'add',
-    '--name',
     rawId,
     '--workspace',
     workspace,
