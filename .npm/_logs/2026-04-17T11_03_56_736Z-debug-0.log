@@ -4,15 +4,15 @@
 3 silly config load:file:/Users/wangqi/clickclaw/resources/targets/darwin-arm64/runtime/lib/node_modules/npm/npmrc
 4 silly config load:file:/Users/wangqi/.openclaw/workspace/.npmrc
 5 silly config load:file:/Users/wangqi/.npmrc
-6 silly config load:file:/Users/wangqi/.nvm/versions/node/v22.22.2/etc/npmrc
+6 silly config load:file:/Users/wangqi/.nvm/versions/node/v20.19.4/etc/npmrc
 7 verbose title npm exec codex-acp
 8 verbose argv "exec" "--yes" "--package" "@zed-industries/codex-acp@^0.11.1" "--" "codex-acp"
-9 verbose logfile logs-max:10 dir:/Users/wangqi/clickclaw/.npm/_logs/2026-04-17T09_23_27_776Z-
-10 verbose logfile /Users/wangqi/clickclaw/.npm/_logs/2026-04-17T09_23_27_776Z-debug-0.log
+9 verbose logfile logs-max:10 dir:/Users/wangqi/clickclaw/.npm/_logs/2026-04-17T11_03_56_736Z-
+10 verbose logfile /Users/wangqi/clickclaw/.npm/_logs/2026-04-17T11_03_56_736Z-debug-0.log
 11 silly logfile start cleaning logs, removing 1 files
 12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
 13 silly logfile done cleaning log files
-14 http fetch GET 200 https://registry.npmjs.org/@zed-industries%2fcodex-acp 728ms (cache revalidated)
+14 http fetch GET 200 https://registry.npmjs.org/@zed-industries%2fcodex-acp 3290ms (cache revalidated)
 15 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
 16 verbose cwd /Users/wangqi/.openclaw/workspace
 17 verbose os Darwin 25.5.0

@@ -1,0 +1,19 @@
+0 verbose cli /Users/wangqi/.nvm/versions/node/v20.19.4/bin/node /Users/wangqi/.nvm/versions/node/v20.19.4/bin/npm
+1 info using npm@10.8.2
+2 info using node@v20.19.4
+3 silly config load:file:/Users/wangqi/.nvm/versions/node/v20.19.4/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/wangqi/clickclaw/.npmrc
+5 silly config load:file:/Users/wangqi/.npmrc
+6 silly config load:file:/Users/wangqi/.nvm/versions/node/v20.19.4/etc/npmrc
+7 verbose title npm run format:check
+8 verbose argv "run" "format:check"
+9 verbose logfile logs-max:10 dir:/Users/wangqi/clickclaw/.npm/_logs/2026-04-17T11_16_16_803Z-
+10 verbose logfile /Users/wangqi/clickclaw/.npm/_logs/2026-04-17T11_16_16_803Z-debug-0.log
+11 silly logfile start cleaning logs, removing 1 files
+12 silly logfile done cleaning log files
+13 verbose cwd /Users/wangqi/clickclaw
+14 verbose os Darwin 25.5.0
+15 verbose node v20.19.4
+16 verbose npm  v10.8.2
+17 verbose exit 0
+18 info ok

@@ -41,15 +41,17 @@ if (files.length === 0) {
 }
 
 if (platform === "win") {
-  const installers = findMatches(files, /^ClickClaw-Setup-.*\.exe$/);
+  // 支持 ClickClaw 和 yutianclaw 两种文件名
+  const installers = findMatches(files, /^[Cc]lick[Cc]law-Setup-.*\.exe$|^[Yy]utianclaw-Setup-.*\.exe$/);
   const manifests = findMatches(files, /^latest\.yml$/);
   if (installers.length === 0) fail(`未找到 Windows 安装包: ${absDir}`);
   if (manifests.length === 0) fail(`未找到 Windows 更新清单 latest.yml: ${absDir}`);
   console.log(`[release-artifacts] win installers: ${installers.join(", ")}`);
   console.log(`[release-artifacts] win manifest: ${manifests.join(", ")}`);
 } else {
-  const dmgs = findMatches(files, /^ClickClaw-.*\.dmg$/);
-  const zips = findMatches(files, /^ClickClaw-.*\.zip$/);
+  // 支持 ClickClaw 和 yutianclaw 两种文件名
+  const dmgs = findMatches(files, /^[Cc]lick[Cc]law-.*\.dmg$|^[Yy]utianclaw-.*\.dmg$/);
+  const zips = findMatches(files, /^[Cc]lick[Cc]law-.*\.zip$|^[Yy]utianclaw-.*\.zip$/);
   const manifests = findMatches(files, /^latest-mac\.yml$/);
   if (dmgs.length === 0) fail(`未找到 macOS DMG: ${absDir}`);
   if (zips.length === 0) fail(`未找到 macOS ZIP: ${absDir}`);
