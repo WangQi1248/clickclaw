@@ -1,6 +1,6 @@
 appId: cn.clickclaw.app
-productName: ClickClaw
-copyright: Copyright © 2026 ClickClaw
+productName: yutianclaw
+copyright: Copyright © 2026 yutianclaw
 
 directories:
   buildResources: assets
@@ -34,7 +34,7 @@ mac:
     - zip
   icon: assets/icon.icns
   category: public.app-category.productivity
-  artifactName: "ClickClaw-${version}-${arch}.${ext}"
+  artifactName: "yutianclaw-${version}-${arch}.${ext}"
   hardenedRuntime: true
   gatekeeperAssess: false
   entitlements: assets/entitlements.mac.plist
@@ -43,7 +43,7 @@ mac:
 dmg:
   # 关闭 DMG 差分更新元数据，避免生成 .dmg.blockmap
   writeUpdateInfo: false
-  artifactName: "ClickClaw-${version}-${arch}.${ext}"
+  artifactName: "yutianclaw-${version}-${arch}.${ext}"
 
 win:
   target: nsis
@@ -58,7 +58,7 @@ nsis:
   runAfterFinish: true
   # 关闭 NSIS 差分包，避免生成 .exe.blockmap
   differentialPackage: false
-  artifactName: "ClickClaw-Setup-${version}-${arch}.${ext}"
+  artifactName: "yutianclaw-Setup-${version}-${arch}.${ext}"
 
 # 自动更新：Generic CDN provider
 # latest.yml / latest-mac.yml 由 electron-builder 打包时自动生成并需上传到同一 CDN 目录

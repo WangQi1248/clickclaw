@@ -83,7 +83,7 @@ function createWindow(): void {
     minWidth: 900,
     minHeight: 600,
     show: false,
-    title: 'ClickClaw',
+    title: 'yutianclaw',
     autoHideMenuBar: true,
     icon: iconPath,
     // macOS：隐藏标题栏保留红绿灯；Windows/Linux：完全无边框，由渲染层 TitleBar 接管
@@ -129,7 +129,6 @@ function createWindow(): void {
 
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-    mainWindow.webContents.openDevTools()
   } else {
     // 使用自定义协议加载，Origin 头为 "app://localhost"
     mainWindow.loadURL('app://localhost')
@@ -147,9 +146,9 @@ if (!gotTheLock) {
 
   app.whenReady().then(() => {
     // macOS 开发态默认会显示 "Electron"，这里强制应用名与 About 信息使用产品名
-    app.setName('ClickClaw')
+    app.setName('yutianclaw')
     app.setAboutPanelOptions({
-      applicationName: 'ClickClaw',
+      applicationName: 'yutianclaw',
       applicationVersion: app.getVersion(),
       version: app.getVersion(),
     })

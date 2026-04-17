@@ -25,6 +25,8 @@ export {
   deleteAgent,
   setDefaultAgent,
   setDefaultModel,
+  normalizeProviderConfig,
+  normalizeConfigCompat,
   inspectConfigHealth,
   getBindings,
   listBindingRules,

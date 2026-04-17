@@ -29,7 +29,7 @@
       "launch": "启动"
     },
     "welcome": {
-      "title": "欢迎使用 ClickClaw",
+      "title": "欢迎使用 yutianclaw",
       "subtitle": "点击即装的 OpenClaw 桌面管理工具，帮助您快速部署 AI 智能体。",
       "detecting": "正在检测系统环境...",
       "startSetup": "开始配置",
@@ -147,7 +147,7 @@
     "about": "关于"
   },
   "dashboard": {
-    "title": "ClickClaw 控制台",
+    "title": "yutianclaw 控制台",
     "gatewayLabel": "服务引擎（Gateway）",
     "gatewayStatus": "Gateway 状态",
     "notStarted": "未启动",
@@ -530,7 +530,7 @@
     "noProviders": "暂无服务商",
     "noProvidersHint": "点击「添加服务商」，配置你的第一个 AI 模型提供商",
     "emptyTitle": "还没有配置 AI 服务商",
-    "emptyHint": "添加一个服务商，ClickClaw 就能驱动你的 AI 智能体",
+    "emptyHint": "添加一个服务商，yutianclaw 就能驱动你的 AI 智能体",
     "providerCount": "{{count}} 个服务商 · {{models}} 个模型",
     "modelCount": "{{count}} 个模型",
     "primarySuffix": "主：{{id}}",
@@ -989,7 +989,7 @@
       "weixinLoggedOut": "已断开微信连接",
       "weixinScanHint": "请使用微信扫描下方二维码，并在手机上确认授权",
       "weixinScanWaiting": "二维码已生成，等待微信扫码确认...",
-      "weixinBundledReady": "微信插件已随 ClickClaw 内置，无需额外安装。",
+      "weixinBundledReady": "微信插件已随 yutianclaw 内置，无需额外安装。",
       "weixinBundledMissing": "未检测到内置微信插件，请先检查当前安装包是否完整。",
       "weixinPluginDisabled": "当前配置中尚未启用微信插件，请先完成初始化或重新保存设置。",
       "weixinConfigMissing": "当前尚未生成 OpenClaw 配置文件，完成初始化后可自动启用微信插件。",
@@ -1228,7 +1228,7 @@
       "openclaw-bundled": "系统内置",
       "openclaw-extra": "系统扩展",
       "agents-skills-personal": "工作区",
-      "managed": "ClickClaw 安装",
+      "managed": "yutianclaw 安装",
       "workspace": "工作区",
       "extra": "自定义"
     },
@@ -1280,7 +1280,7 @@
       "language": "界面语言",
       "languageDesc": "切换应用界面显示语言",
       "launchAtLogin": "开机自启",
-      "launchAtLoginDesc": "系统启动时自动运行 ClickClaw"
+      "launchAtLoginDesc": "系统启动时自动运行 yutianclaw"
     },
     "gateway": {
       "port": "监听端口",
@@ -1296,7 +1296,7 @@
     "logs": {
       "title": "日志",
       "openLogDir": "打开日志目录",
-      "openLogDirDesc": "ClickClaw 运行日志所在目录"
+      "openLogDirDesc": "yutianclaw 运行日志所在目录"
     },
     "remotePresets": {
       "title": "模型数据源",
@@ -1310,7 +1310,7 @@
     "proxy": {
       "title": "网络代理",
       "enable": "启用代理",
-      "enableDesc": "所有 ClickClaw 请求和 OpenClaw AI 请求都将通过代理转发",
+      "enableDesc": "所有 yutianclaw 请求和 OpenClaw AI 请求都将通过代理转发",
       "url": "代理地址",
       "urlPlaceholder": "http://127.0.0.1:7890",
       "urlDesc": "支持 HTTP、HTTPS 和 SOCKS5 协议（如 socks5://127.0.0.1:1080）",
@@ -1328,10 +1328,10 @@
     },
     "versions": {
       "title": "版本与更新",
-      "clickclawGroup": "ClickClaw 管理工具",
+      "clickclawGroup": "yutianclaw 管理工具",
       "openclawGroup": "OpenClaw AI 引擎",
       "appVersion": "应用版本",
-      "appVersionDesc": "ClickClaw 应用本体版本",
+      "appVersionDesc": "yutianclaw 应用本体版本",
       "appUpdate": "应用更新",
       "engineVersion": "引擎版本",
       "engineVersionDesc": "Gateway 核心引擎，可独立于应用更新",
@@ -1486,7 +1486,7 @@
     }
   },
   "aboutPage": {
-    "title": "关于 ClickClaw",
+    "title": "关于 yutianclaw",
     "subtitle": "产品信息、社区入口与动态公告",
     "defaultSlogan": "点击即装的 OpenClaw 桌面管理工具",
     "website": "官网",
@@ -1524,7 +1524,7 @@
       "updateDownloading": "下载中 {{progress}}%",
       "updateInstall": "安装并重启",
       "updateLatest": "已是最新版本",
-      "quit": "退出 ClickClaw"
+      "quit": "退出 yutianclaw"
     }
   }
 }

@@ -29,7 +29,7 @@
       "launch": "Launch"
     },
     "welcome": {
-      "title": "Welcome to ClickClaw",
+      "title": "Welcome to yutianclaw",
       "subtitle": "One-click OpenClaw desktop manager. Deploy your AI Agent in minutes.",
       "detecting": "Detecting system environment...",
       "startSetup": "Start Setup",
@@ -145,7 +145,7 @@
     "about": "About"
   },
   "dashboard": {
-    "title": "ClickClaw Dashboard",
+    "title": "yutianclaw Dashboard",
     "gatewayLabel": "Service Engine (Gateway)",
     "gatewayStatus": "Gateway Status",
     "notStarted": "Not Started",
@@ -528,7 +528,7 @@
     "noProviders": "No providers yet",
     "noProvidersHint": "Click \"Add Provider\" to configure your first AI model provider",
     "emptyTitle": "No AI providers configured",
-    "emptyHint": "Add a provider to let ClickClaw power your AI Agent",
+    "emptyHint": "Add a provider to let yutianclaw power your AI Agent",
     "providerCount": "{{count}} providers · {{models}} models",
     "modelCount": "{{count}} models",
     "primarySuffix": "Primary: {{id}}",
@@ -987,7 +987,7 @@
       "weixinLoggedOut": "Disconnected from WeChat",
       "weixinScanHint": "Use WeChat to scan the QR code below and confirm on your phone",
       "weixinScanWaiting": "QR code is ready. Waiting for WeChat confirmation...",
-      "weixinBundledReady": "The WeChat plugin is bundled with ClickClaw. No extra installation is needed.",
+      "weixinBundledReady": "The WeChat plugin is bundled with yutianclaw. No extra installation is needed.",
       "weixinBundledMissing": "Bundled WeChat plugin was not found. Check whether the current app package is complete.",
       "weixinPluginDisabled": "The WeChat plugin is not enabled in the current config yet. Finish setup or save settings again first.",
       "weixinConfigMissing": "OpenClaw config has not been created yet. The WeChat plugin will be enabled automatically after setup.",
@@ -1005,7 +1005,7 @@
       "wecomScanFailed": "Scan failed: {{error}}",
       "wecomScanSuccessMask": "Scan successful\nCredentials filled in",
       "wecomScanAppHint": "Use the WeCom app to scan the QR code below and authorize",
-      "wecomQuickAuthDesc": "Scan with the WeCom app and ClickClaw will finish setup automatically. No need to enter Bot ID or Secret.",
+      "wecomQuickAuthDesc": "Scan with the WeCom app and yutianclaw will finish setup automatically. No need to enter Bot ID or Secret.",
       "wecomRetryTitle": "Scanned but Bot info missing",
       "wecomRetryContent": "WeCom returned success, but Bot ID / Secret was not returned yet. Retry now?",
       "wecomRetryNow": "Retry now",
@@ -1020,7 +1020,7 @@
       "feishuScanFailed": "Scan failed: {{error}}",
       "feishuScanSuccessMask": "Scan successful\nCredentials filled in",
       "feishuScanAppHint": "Use the Feishu app to scan the QR code below and authorize",
-      "feishuQuickAuthDesc": "Scan with the Feishu app and ClickClaw will finish setup automatically. China mainland Feishu is used by default.",
+      "feishuQuickAuthDesc": "Scan with the Feishu app and yutianclaw will finish setup automatically. China mainland Feishu is used by default.",
       "feishuScanLink": "QR page",
       "feishuScanOpenLink": "Open",
       "feishuStreaming": "Streaming",
@@ -1279,7 +1279,7 @@
       "language": "Language",
       "languageDesc": "Switch the interface language",
       "launchAtLogin": "Launch at Login",
-      "launchAtLoginDesc": "Automatically start ClickClaw when you log in"
+      "launchAtLoginDesc": "Automatically start yutianclaw when you log in"
     },
     "gateway": {
       "port": "Listen Port",
@@ -1295,7 +1295,7 @@
     "logs": {
       "title": "Logs",
       "openLogDir": "Open Log Directory",
-      "openLogDirDesc": "Directory containing ClickClaw runtime logs"
+      "openLogDirDesc": "Directory containing yutianclaw runtime logs"
     },
     "remotePresets": {
       "title": "Model Data Source",
@@ -1309,7 +1309,7 @@
     "proxy": {
       "title": "Network Proxy",
       "enable": "Enable Proxy",
-      "enableDesc": "All ClickClaw and OpenClaw AI requests will be routed through the proxy",
+      "enableDesc": "All yutianclaw and OpenClaw AI requests will be routed through the proxy",
       "url": "Proxy URL",
       "urlPlaceholder": "http://127.0.0.1:7890",
       "urlDesc": "Supports HTTP, HTTPS and SOCKS5 (e.g. socks5://127.0.0.1:1080)",
@@ -1327,10 +1327,10 @@
     },
     "versions": {
       "title": "Versions & Updates",
-      "clickclawGroup": "ClickClaw App",
+      "clickclawGroup": "yutianclaw App",
       "openclawGroup": "OpenClaw AI Engine",
       "appVersion": "App Version",
-      "appVersionDesc": "ClickClaw application version",
+      "appVersionDesc": "yutianclaw application version",
       "appUpdate": "App Update",
       "engineVersion": "Engine Version",
       "engineVersionDesc": "Gateway core engine — updates independently from the app",
@@ -1485,7 +1485,7 @@
     }
   },
   "aboutPage": {
-    "title": "About ClickClaw",
+    "title": "About yutianclaw",
     "subtitle": "Product info, community entries, and dynamic announcements",
     "defaultSlogan": "One-click desktop manager for OpenClaw",
     "website": "Website",
@@ -1523,7 +1523,7 @@
       "updateDownloading": "Downloading {{progress}}%",
       "updateInstall": "Install & Restart",
       "updateLatest": "Up to date",
-      "quit": "Quit ClickClaw"
+      "quit": "Quit yutianclaw"
     }
   }
 }

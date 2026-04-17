@@ -105,7 +105,7 @@ function MainApp(): React.ReactElement {
         >
           <img
             src={logo}
-            alt="ClickClaw"
+            alt="yutianclaw"
             style={{
               width: 72,
               height: 72,
@@ -121,7 +121,7 @@ function MainApp(): React.ReactElement {
               fontFamily: 'system-ui, -apple-system, sans-serif',
             }}
           >
-            ClickClaw
+            yutianclaw
           </span>
         </div>
 

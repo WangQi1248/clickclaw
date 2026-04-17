@@ -28,6 +28,7 @@ import {
   setChannel,
   getChannels,
   deleteChannel,
+  normalizeConfigCompat,
   saveChannelAccount,
   deleteChannelAccount,
   setChannelDefaultAccount,
@@ -125,6 +126,19 @@ const vetAbortControllers = new Map<string, AbortController>()
 export function registerIpcHandlers(): void {
   let gatewayStartupPromise: Promise<GatewayStartResult> | null = null
 
+  const repairGatewayCompatConfig = (): void => {
+    try {
+      const current = readConfig()
+      const normalized = normalizeConfigCompat(current)
+      if (normalized !== current) {
+        writeConfig(normalized, { source: 'auto', summary: '兼容修复：补齐 Provider 模型名称' })
+        log.info('gateway compat config repaired before startup')
+      }
+    } catch (err) {
+      log.warn('repairGatewayCompatConfig failed:', err)
+    }
+  }
+
   const startGatewayManaged = async (
     action: 'start' | 'start-with-recovery' | 'restart'
   ): Promise<GatewayStartResult> => {
@@ -135,6 +149,7 @@ export function registerIpcHandlers(): void {
 
     const gw = getGatewayProcess()
     gw.setUserStopped(false)
+    repairGatewayCompatConfig()
     ensureInsecureAuth()
     selectRuntime()
 

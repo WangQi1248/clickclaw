@@ -104,9 +104,9 @@ function SetupPage(): React.ReactElement {
 
         {/* Logo + 品牌名 */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 40 }}>
-          <img src={logoSvg} alt="ClickClaw" style={{ width: 28, height: 28 }} />
+          <img src={logoSvg} alt="yutianclaw" style={{ width: 28, height: 28 }} />
           <span style={{ color: '#fff', fontWeight: 700, fontSize: 16, letterSpacing: '-0.02em' }}>
-            ClickClaw
+            yutianclaw
           </span>
         </div>
 
@@ -185,7 +185,7 @@ function SetupPage(): React.ReactElement {
             letterSpacing: '0.02em',
           }}
         >
-          <span>ClickClaw · OpenClaw</span>
+          <span>yutianclaw · OpenClaw</span>
           <AppVersion style={{ color: 'rgba(255,255,255,0.42)' }} />
         </div>
       </div>

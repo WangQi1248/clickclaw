@@ -1,0 +1,22 @@
+0 verbose cli /Users/wangqi/clickclaw/resources/targets/darwin-arm64/runtime/bin/node /Users/wangqi/clickclaw/resources/targets/darwin-arm64/runtime/lib/node_modules/npm/bin/npm-cli.js
+1 info using npm@10.9.7
+2 info using node@v22.22.2
+3 silly config load:file:/Users/wangqi/clickclaw/resources/targets/darwin-arm64/runtime/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/wangqi/.openclaw/workspace/.npmrc
+5 silly config load:file:/Users/wangqi/.npmrc
+6 silly config load:file:/Users/wangqi/.nvm/versions/node/v22.22.2/etc/npmrc
+7 verbose title npm exec codex-acp
+8 verbose argv "exec" "--yes" "--package" "@zed-industries/codex-acp@^0.11.1" "--" "codex-acp"
+9 verbose logfile logs-max:10 dir:/Users/wangqi/clickclaw/.npm/_logs/2026-04-17T09_24_35_063Z-
+10 verbose logfile /Users/wangqi/clickclaw/.npm/_logs/2026-04-17T09_24_35_063Z-debug-0.log
+11 silly logfile start cleaning logs, removing 1 files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 silly logfile done cleaning log files
+14 http fetch GET 200 https://registry.npmjs.org/@zed-industries%2fcodex-acp 821ms (cache revalidated)
+15 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+16 verbose cwd /Users/wangqi/.openclaw/workspace
+17 verbose os Darwin 25.5.0
+18 verbose node v22.22.2
+19 verbose npm  v10.9.7
+20 verbose exit 0
+21 info ok

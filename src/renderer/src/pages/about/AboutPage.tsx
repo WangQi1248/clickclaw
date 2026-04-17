@@ -95,7 +95,7 @@ export default function AboutPage(): React.ReactElement {
     }
   }, [])
 
-  const productName = aboutPayload?.about?.productName || 'ClickClaw'
+  const productName = aboutPayload?.about?.productName || 'yutianclaw'
   const slogan = aboutPayload?.about?.slogan || t('aboutPage.defaultSlogan')
   const website = aboutPayload?.about?.website || CLICKCLAW_WEBSITE_URL
   const docs = aboutPayload?.about?.docs || CLICKCLAW_DOCS_URL

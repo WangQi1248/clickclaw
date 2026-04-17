@@ -61,7 +61,7 @@ function buildMacTrayMenu(win: BrowserWindow): Menu {
 
   return Menu.buildFromTemplate([
     {
-      label: '显示 ClickClaw',
+      label: '显示 yutianclaw',
       click: () => showMainWindow(win),
     },
     { type: 'separator' },
@@ -92,7 +92,7 @@ function buildMacTrayMenu(win: BrowserWindow): Menu {
     },
     { type: 'separator' },
     {
-      label: '退出 ClickClaw',
+      label: '退出 yutianclaw',
       click: () => app.quit(),
     },
   ])
@@ -174,12 +174,12 @@ function togglePopup(): void {
 function updateTooltip(state: string): void {
   if (!tray) return
   const tips: Record<string, string> = {
-    stopped: 'ClickClaw — Gateway 已停止',
-    starting: 'ClickClaw — Gateway 启动中...',
-    running: 'ClickClaw — Gateway 运行中',
-    stopping: 'ClickClaw — Gateway 停止中...',
+    stopped: 'yutianclaw — Gateway 已停止',
+    starting: 'yutianclaw — Gateway 启动中...',
+    running: 'yutianclaw — Gateway 运行中',
+    stopping: 'yutianclaw — Gateway 停止中...',
   }
-  tray.setToolTip(tips[state] ?? 'ClickClaw')
+  tray.setToolTip(tips[state] ?? 'yutianclaw')
 }
 
 // ========== 初始化 ==========
@@ -190,7 +190,7 @@ export function createTray(win: BrowserWindow): void {
   const isMac = process.platform === 'darwin'
   const icon = createTrayIcon()
   tray = new Tray(icon)
-  tray.setToolTip('ClickClaw')
+  tray.setToolTip('yutianclaw')
 
   if (isMac) {
     const syncMenu = (): void => {

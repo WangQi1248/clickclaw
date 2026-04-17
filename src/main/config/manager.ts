@@ -96,6 +96,54 @@ export interface ProviderConfig {
   [key: string]: unknown
 }
 
+export function normalizeProviderConfig(provider: ProviderConfig): ProviderConfig {
+  if (!Array.isArray(provider.models)) return provider
+
+  let changed = false
+  const normalizedModels = provider.models.map((model) => {
+    if (typeof model.name === 'string' && model.name.trim()) {
+      return model
+    }
+
+    changed = true
+    return {
+      ...model,
+      name: model.id,
+    }
+  })
+
+  if (!changed) return provider
+
+  return {
+    ...provider,
+    models: normalizedModels,
+  }
+}
+
+export function normalizeConfigCompat(config: OpenclawConfig): OpenclawConfig {
+  const providers = config.models?.providers
+  if (!providers) return config
+
+  let changed = false
+  const normalizedProviders = Object.fromEntries(
+    Object.entries(providers).map(([key, provider]) => {
+      const normalized = normalizeProviderConfig(provider)
+      if (normalized !== provider) changed = true
+      return [key, normalized]
+    })
+  )
+
+  if (!changed) return config
+
+  return {
+    ...config,
+    models: {
+      ...config.models,
+      providers: normalizedProviders,
+    },
+  }
+}
+
 export interface AgentConfig {
   id: string
   default?: boolean
@@ -194,6 +242,8 @@ export function writeConfig(
   config: OpenclawConfig,
   options?: { source?: SnapshotSource; summary?: string; skipSnapshot?: boolean }
 ): void {
+  const normalizedConfig = normalizeConfigCompat(config)
+
   // 确保目录存在
   if (!existsSync(OPENCLAW_HOME)) {
     mkdirSync(OPENCLAW_HOME, { recursive: true })
@@ -209,7 +259,7 @@ export function writeConfig(
   }
 
   // 写前验证
-  const content = JSON5.stringify(config, null, 2) + '\n'
+  const content = JSON5.stringify(normalizedConfig, null, 2) + '\n'
   const validation = validateConfigContent(content)
   if (!validation.valid) {
     throw new Error(`config validation failed: ${validation.error}`)

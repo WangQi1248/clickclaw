@@ -165,7 +165,7 @@ export default function TitleBar(): React.ReactElement {
       >
         <img
           src={logo}
-          alt="ClickClaw"
+          alt="yutianclaw"
           style={{
             width: 22,
             height: 22,
@@ -183,7 +183,7 @@ export default function TitleBar(): React.ReactElement {
             backgroundClip: 'text',
           }}
         >
-          ClickClaw
+          yutianclaw
         </span>
 
         <GatewayBadge state={gwState} />

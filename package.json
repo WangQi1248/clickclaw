@@ -1,9 +1,9 @@
 {
   "name": "clickclaw",
   "version": "0.3.2",
-  "description": "ClickClaw — 点击即装的 OpenClaw 桌面管理工具",
+  "description": "yutianclaw — 点击即装的 OpenClaw 桌面管理工具",
   "main": "./out/main/index.js",
-  "author": "ClickClaw Team",
+  "author": "yutianclaw Team",
   "license": "GPL-3.0",
   "homepage": "https://clickclaw.cn",
   "scripts": {

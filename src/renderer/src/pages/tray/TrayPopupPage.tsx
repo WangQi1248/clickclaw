@@ -225,7 +225,7 @@ export default function TrayPopupPage(): React.ReactElement {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <img
             src={logo}
-            alt="ClickClaw"
+            alt="yutianclaw"
             width={20}
             height={20}
             style={{ filter: 'drop-shadow(0 0 5px rgba(255,77,42,0.5))' }}
@@ -240,7 +240,7 @@ export default function TrayPopupPage(): React.ReactElement {
               backgroundClip: 'text',
             }}
           >
-            ClickClaw
+            yutianclaw
           </span>
         </div>
         <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11 }}>{version}</span>

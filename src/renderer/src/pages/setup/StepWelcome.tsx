@@ -112,7 +112,7 @@ function StepWelcome({ data, updateData, onNext }: Props): React.ReactElement {
   return (
     <div style={{ textAlign: 'center', maxWidth: 520, width: '100%' }}>
       {/* Logo */}
-      <img src={logoSvg} alt="ClickClaw" style={{ width: 80, height: 80, marginBottom: 16 }} />
+      <img src={logoSvg} alt="yutianclaw" style={{ width: 80, height: 80, marginBottom: 16 }} />
       <Title level={3} style={{ marginBottom: 8 }}>
         {t('setup.welcome.title')}
       </Title>
