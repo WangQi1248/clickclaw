@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { resolveInitialRoute } from '../../main/app-routing'
+import { resolveInitialRoute, toFileFetchUrl } from '../../main/app-routing'
 
 describe('resolveInitialRoute', () => {
   it('setup 已完成且配置有效时直接进入 dashboard', () => {
@@ -42,5 +42,11 @@ describe('resolveInitialRoute', () => {
       route: '/setup',
       hasConfig: false,
     })
+  })
+})
+
+describe('toFileFetchUrl', () => {
+  it('生成可供 net.fetch 使用的 file URL', () => {
+    expect(toFileFetchUrl('/tmp/clickclaw/index.html')).toBe('file:///tmp/clickclaw/index.html')
   })
 })

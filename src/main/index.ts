@@ -5,6 +5,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { detect } from './runtime'
 import { registerIpcHandlers } from './ipc-handlers'
 import { getGatewayProcess } from './gateway'
+import { toFileFetchUrl } from './app-routing'
 import { createLogger } from './logger'
 import { createTray, destroyTray } from './tray'
 import { loadAppState, saveAppState } from './config/app-cache'
@@ -188,7 +189,7 @@ if (!gotTheLock) {
       // pathname='/' → index.html；其余去掉前导 /
       const relative = pathname === '/' ? 'index.html' : pathname.slice(1)
       const filePath = join(__dirname, '../renderer', relative)
-      return net.fetch(`file://${filePath}`)
+      return net.fetch(toFileFetchUrl(filePath))
     })
 
     // 注册所有 IPC handlers

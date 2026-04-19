@@ -1,3 +1,5 @@
+import { pathToFileURL } from 'url'
+
 export function resolveInitialRoute(params: {
   hasValidConfig: boolean
   hasProviders: boolean
@@ -22,4 +24,8 @@ export function resolveInitialRoute(params: {
     return { route: '/setup', hasConfig: true }
   }
   return { route: '/setup', hasConfig: false }
+}
+
+export function toFileFetchUrl(filePath: string): string {
+  return pathToFileURL(filePath).toString()
 }
